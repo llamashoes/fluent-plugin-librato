@@ -21,8 +21,9 @@ to be uploaded on Rubygems
 * **email**: (required) The email address associated with Librato.
 * **apikey**: (required) The apikey associated with Librato.
 * **measurement_key**: (optional) The measurement key field. Defaults to "key"
+* **value_key**: (optional) The measurement value field. Defaults to "value"
 * **source_key**: (optional) The source key field. Defaults to "source"
-* **type_key**: (optional) The field that specified type (gauge or counter). Defaults to "type"
+* **type_key**: (optional) The field that specified type (gauge or counter). Defaults to "gauge"
 
 ## Example Expected Input
 
