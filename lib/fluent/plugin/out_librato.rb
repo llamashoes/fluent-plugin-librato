@@ -29,6 +29,7 @@ module Fluent
 
     def write(chunk)
       chunk.msgpack_each { |tag, time, record|
+        record[@source_key] ||= tag
         missing_keys = [@measurement_key, @value_key, @source_key].select { |k| !record[k] }
         if missing_keys.length > 0
           log.warn "missing the required field(s) " + missing_keys.join(",")
@@ -37,7 +38,7 @@ module Fluent
         @queue.add(
           record[@measurement_key].to_s =>
             {
-              :source => record[@source_key] || tag,
+              :source => record[@source_key],
               :value => record[@value_key],
               :type => record[@type_key] || "gauge"
             })
