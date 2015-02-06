@@ -35,6 +35,11 @@ module Fluent
           log.warn "missing the required field(s) " + missing_keys.join(",")
           next
         end
+
+        if record[@source_key].length > 63
+          log.warn "source key is longer than 63 characters and will be truncated in Librato."
+        end
+
         @queue.add(
           record[@measurement_key].to_s =>
             {
