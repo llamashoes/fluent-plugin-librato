@@ -27,6 +27,28 @@ module Fluent
       @queue.submit
     end
 
+    def invalid_characters?(value)
+      /^[A-Za-z0-9.:\-_]+$/.match(value).nil?
+    end
+
+    def validate_fields(record)
+      if record[@source_key].length > 63
+          log.warn "Source value is longer than 63 characters and will be truncated in Librato."
+      end
+
+      if invalid_characters? record[@source_key]
+          log.error "Source value may only contain characters 'A-Za-z0-9.:-_'."
+      end
+
+      if record[@measurement_key].length > 63
+          log.warn "Measurement value is longer than 63 characters and will be truncated in Librato."
+      end
+
+      if invalid_characters? record[@measurement_key]
+          log.error "Measurement value may only contain characters 'A-Za-z0-9.:-_'."
+      end
+    end
+
     def write(chunk)
       chunk.msgpack_each { |tag, time, record|
         record[@source_key] ||= tag
@@ -36,9 +58,7 @@ module Fluent
           next
         end
 
-        if record[@source_key].length > 63
-          log.warn "source key is longer than 63 characters and will be truncated in Librato."
-        end
+        validate_fields record
 
         @queue.add(
           record[@measurement_key].to_s =>
