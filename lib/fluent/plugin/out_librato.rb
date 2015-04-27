@@ -33,19 +33,19 @@ module Fluent
 
     def validate_fields(record)
       if record[@source_key].length > 63
-          log.warn "Source value is longer than 63 characters and will be truncated in Librato."
+          log.warn "Source value is longer than 63 characters and will be truncated in Librato"
       end
 
       if invalid_characters? record[@source_key]
-          log.error "Source value may only contain characters 'A-Za-z0-9.:-_'."
+          log.error "Source value may only contain characters 'A-Za-z0-9.:-_'"
       end
 
       if record[@measurement_key].length > 63
-          log.warn "Measurement value is longer than 63 characters and will be truncated in Librato."
+          log.warn "Measurement value is longer than 63 characters and will be truncated in Librato"
       end
 
       if invalid_characters? record[@measurement_key]
-          log.error "Measurement value may only contain characters 'A-Za-z0-9.:-_'."
+          log.error "Measurement value may only contain characters 'A-Za-z0-9.:-_'"
       end
     end
 
